@@ -25,7 +25,7 @@ const register = asyncWrapper(
         const result = await cloudinary.uploader.upload(req.file.path,{folder:"books"});
         const oldEmail = await User.findOne({email: email});
         if (oldEmail) {
-        const error = appError.create("البريد الالكتروني  موجود بالفعل" , 400 , httpStatus.FAIL );;
+        const error = appError.create("Email already exists" , 400 , httpStatus.FAIL );;
         return next(error);               
         }
         /********************* password hashing *****************************/
@@ -44,7 +44,7 @@ const register = asyncWrapper(
         const token = await generateJWT({email : newUser.email , id: newUser._id , role : newUser.role});
         newUser.token = token;
         await newUser.save();
-      return  res.status(201).json({status : "success" , data : "add a new user" , data_ar : "تم انشاء حساب جديد"});
+      return  res.status(201).json({status : "success" , data : "add a new user"});
     }
 )
  /* =============================== Login ======================================== */
@@ -52,7 +52,7 @@ const login = asyncWrapper(
     async(req,res , next) =>{
     const {email , password} = req.body;
     if (!email && !password) {
-        const error = appError.create("يرجاء ادخال بريدك الالكتروني و كلمة المرور" , 400 , httpStatus.FAIL );;
+        const error = appError.create("Please enter your email and password" , 400 , httpStatus.FAIL );;
         return next(error);                
     }
     const findUser = await User.findOne({email : email});
@@ -60,8 +60,8 @@ const login = asyncWrapper(
     if (findUser && matchedPassword) {
     const token = await generateJWT({email : findUser.email , id: findUser._id , role : findUser.role});
     console.log(req.currentUser);
-    return res.status(200).json({status : "success" , data : findUser  , data_en : "logged in success" ,
-     data_ar : "تم تسجيل الدخول بنجاح" ,token});       
+    return res.status(200).json({status : "success" , 
+    data : {id: findUser._id , role : findUser.role , profile : findUser.profile  }  , data_en : "logged in is success",token});       
     }
     else{
         const error = appError.create("email and  password is not correct", 500 , httpStatus.FAIL );;
@@ -83,10 +83,10 @@ const updateUser = asyncWrapper(
             gender,
         }});
         if (!update) {
-            const error = appError.create(httpStatus.MESSAGE , 404 , httpStatus.FAIL );;
+            const error = appError.create(httpStatus.MESSAGE , 404 , httpStatus.FAIL);;
            return next(error);
         }
-        return res.status(200).json({status : httpStatus.SUCCESS , data_en : "updated your user" , data_ar : "تم التعديل بنجاح" , update});       
+        return res.status(200).json({status : httpStatus.SUCCESS , data_en : "updated your user"});       
     }
 );
  /* =============================== Profile ======================================== */
@@ -119,7 +119,7 @@ const updatedEmail = asyncWrapper(
             const error = appError.create(httpStatus.MESSAGE , 404 , httpStatus.FAIL );;
            return next(error);
         }
-        return res.status(200).json({status : httpStatus.SUCCESS , data_en : "updated your user" , data_ar : "تم التعديل بنجاح" ,data:updated}); 
+        return res.status(200).json({status : httpStatus.SUCCESS , data_en : "updated your user"}); 
     }
 )
 /* ====================== Update image By Id ================================= */
@@ -132,10 +132,9 @@ const update_image_prfile = asyncWrapper(
            const error = appError.create(httpStatus.MESSAGE , 404 , httpStatus.FAIL );
            return next(error);
             }
-        return res.status(200).json({status : httpStatus.SUCCESS , data :update }); 
+        return res.status(200).json({status : httpStatus.SUCCESS, data_en : "updated your user"}); 
     }
 )
-
 module.exports = {
     getAllUsers,
     register,
