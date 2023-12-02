@@ -33,7 +33,7 @@ router.route('/add')
 .post(verifyToken,allowedTo('admin', 'manager'),uploadImage.single('image'),addBook);
 
 router.route('/')
-.get(getAllBooks);
+.get(verifyToken,getAllBooks);
 
 router.route('/view/:id')
 .get(get_single_book); 
