@@ -25,7 +25,6 @@ const {getAllUsers , register , login ,update_image_prfile,
   updateUser , updatedEmail , deleteUser , profile} = require('../controller/user.controller');
 const verifyToken = require('../middleWare/verifyToken');
 const allowedTo = require('../middleWare/allowedTo');
-// const funcCloudinary = require('../middleWare/funcCloundinary');
 router.route('/')
 .get(verifyToken,allowedTo('admin','manager'),getAllUsers);
 
@@ -49,6 +48,6 @@ router.route('/update-image-profile/:id')
 
 
 router.route('/delete-profile/:id')
-.delete(verifyToken,allowedTo('admin', 'manager'),deleteUser);
+.delete(verifyToken,deleteUser);
 
 module.exports = router;
