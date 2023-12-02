@@ -60,7 +60,7 @@ const login = asyncWrapper(
     if (findUser && matchedPassword) {
     const token = await generateJWT({email : findUser.email , id: findUser._id , role : findUser.role});
     console.log(req.currentUser);
-    return res.status(200).json({status : "success" , data : {role : findUser.role , id : findUser._id , profile:findUser.profile }  , data_en : "logged in success" ,
+    return res.status(200).json({status : "success" , data : findUser  , data_en : "logged in success" ,
      data_ar : "تم تسجيل الدخول بنجاح" ,token});       
     }
     else{
