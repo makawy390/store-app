@@ -62,7 +62,7 @@ const login = asyncWrapper(
     console.log(req.currentUser);
     return res.status(200).json({status : "success" , 
     data : {id: findUser._id , role : findUser.role , profile : findUser.profile,
-            first_name : findUser.first_name ,last_name : last_name.indUser}  , data_en : "logged in is success",token});       
+            first_name : findUser.first_name ,last_name : last_name.findUser}  , data_en : "logged in is success",token});       
     }
     else{
         const error = appError.create("email and  password is not correct", 500 , httpStatus.FAIL );;
